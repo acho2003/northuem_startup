@@ -4,7 +4,11 @@ import { mockUsers, mockTasks, mockNotifications, mockRunners } from '../data/mo
 const AppContext = createContext(null);
 
 export function AppProvider({ children }) {
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+    // We initialize to a fast default, but on fast-login we swap these
     const [currentUser, setCurrentUser] = useState({ ...mockUsers[0] });
+
     const [tasks, setTasks] = useState(mockTasks.map(t => ({ ...t })));
     const [notifications, setNotifications] = useState([...mockNotifications]);
     const [runners, setRunners] = useState([...mockRunners]);
@@ -13,6 +17,22 @@ export function AppProvider({ children }) {
     const [locationFilter, setLocationFilter] = useState('All');
     const [isLoading, setIsLoading] = useState(false);
     const [ratingTarget, setRatingTarget] = useState(null);
+
+    const login = (role) => {
+        // Select the demo user based on role
+        const mockUser = role === 'runner'
+            ? mockUsers.find(u => u.role === 'runner')
+            : mockUsers.find(u => u.role === 'poster');
+
+        // In case no mock user matched, default to the first
+        setCurrentUser(mockUser ? { ...mockUser } : { ...mockUsers[0] });
+        setIsAuthenticated(true);
+        setActiveTab('home');
+    };
+
+    const logout = () => {
+        setIsAuthenticated(false);
+    };
 
     const toggleOnline = () => {
         if (!currentUser.isOnline) {
@@ -42,8 +62,9 @@ export function AppProvider({ children }) {
 
     const acceptTask = (taskId) => {
         setTasks(prev =>
-            prev.map(t => t.id === taskId ? { ...t, status: 'accepted' } : t)
+            prev.map(t => t.id === taskId ? { ...t, status: 'accepted', runnerId: currentUser.id } : t)
         );
+        setActiveTab('mytasks');
         setNotifications(prev => [
             { id: 'n_' + Date.now(), type: 'accepted', message: `You accepted a delivery! It's now in your task list.`, time: 'Just now', read: false },
             ...prev,
@@ -57,7 +78,7 @@ export function AppProvider({ children }) {
         if (status === 'completed') {
             setRatingTarget({ taskId });
             setNotifications(prev => [
-                { id: 'n_' + Date.now(), type: 'completed', message: `Great job! Delivery marked as Completed. Please rate the customer.`, time: 'Just now', read: false },
+                { id: 'n_' + Date.now(), type: 'completed', message: `Delivery marked as Completed. Please rate the customer.`, time: 'Just now', read: false },
                 ...prev,
             ]);
             setCurrentUser(u => ({ ...u, tasksCompleted: u.tasksCompleted + 1 }));
@@ -76,16 +97,24 @@ export function AppProvider({ children }) {
     const unreadCount = notifications.filter(n => !n.read).length;
 
     const availableTasks = tasks.filter(t => {
-        if (!currentUser.isOnline) return false;
+        if (!currentUser.isOnline && currentUser.role === 'runner') return false;
         if (t.status !== 'available') return false;
         if (locationFilter !== 'All' && !t.pickup.includes(locationFilter) && !t.dropoff.includes(locationFilter)) return false;
         return true;
     });
 
-    const myTasks = tasks.filter(t => ['accepted', 'inProgress', 'completed'].includes(t.status));
+    // Posters see tasks they'posted'. Runners see 'accepted' tasks.
+    const myTasks = tasks.filter(t => {
+        if (currentUser.role === 'poster') {
+            return t.posterId === currentUser.id;
+        } else {
+            return ['accepted', 'inProgress', 'completed'].includes(t.status) && t.runnerId === currentUser.id;
+        }
+    });
 
     return (
         <AppContext.Provider value={{
+            isAuthenticated, login, logout,
             currentUser, toggleOnline,
             tasks, availableTasks, myTasks,
             notifications, unreadCount, markAllNotificationsRead, setNotifications,

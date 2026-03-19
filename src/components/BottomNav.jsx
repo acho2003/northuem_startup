@@ -10,11 +10,17 @@ const tabs = [
 ];
 
 export default function BottomNav() {
-    const { activeTab, setActiveTab, unreadCount } = useApp();
+    const { activeTab, setActiveTab, unreadCount, currentUser } = useApp();
+
+    const visibleTabs = tabs.filter(t => {
+        if (currentUser?.role === 'runner' && t.id === 'runnersmap') return false;
+        if (currentUser?.role === 'poster' && t.id === 'home') return false;
+        return true;
+    });
 
     return (
         <nav className="bottom-nav">
-            {tabs.map(tab => (
+            {visibleTabs.map(tab => (
                 <button
                     key={tab.id}
                     className={`nav-item ${activeTab === tab.id ? 'active' : ''}`}

@@ -32,8 +32,8 @@ export default function LiveTrackingScreen() {
     const estimatedMinsLeft = Math.max(1, Math.round(15 - (progress / 100) * 15));
     const estimatedMilesLeft = Math.max(0.1, (2.5 - (progress / 100) * 2.5)).toFixed(1);
 
-    // A Google Maps iframe as the base layer! Using New York as a realistic base city map.
-    const mapIframeUrl = "https://maps.google.com/maps?q=New+York+City+Streets&t=m&z=15&ie=UTF8&iwloc=&output=embed";
+    // A Google Maps iframe mapped to Thimphu, Bhutan.
+    const mapIframeUrl = "https://maps.google.com/maps?q=Thimphu,+Bhutan&t=m&z=15&ie=UTF8&iwloc=&output=embed";
 
     return (
         <div className="screen live-tracking-screen">

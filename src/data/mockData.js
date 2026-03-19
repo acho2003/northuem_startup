@@ -57,6 +57,7 @@ export const mockUsers = [
         rating: 4.7,
         tasksCompleted: 38,
         isOnline: true,
+        role: 'runner',
         vehicle: 'Car 🚗',
         reviews: [
             { from: 'Jigme', rating: 5, comment: 'Very reliable and careful with packages!' },
@@ -70,6 +71,7 @@ export const mockUsers = [
         rating: 4.2,
         tasksCompleted: 15,
         isOnline: false,
+        role: 'poster',
         vehicle: 'Bike 🚲',
         reviews: [
             { from: 'Tshering', rating: 4, comment: 'Fast and friendly delivery.' },

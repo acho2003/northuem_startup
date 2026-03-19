@@ -7,16 +7,21 @@ import NotificationsScreen from './screens/NotificationsScreen';
 import ProfileScreen from './screens/ProfileScreen';
 import LiveTrackingScreen from './screens/LiveTrackingScreen';
 import AddPostScreen from './screens/AddPostScreen';
+import RunnersMapScreen from './screens/RunnersMapScreen';
+import AuthScreen from './screens/AuthScreen';
 import './index.css';
 
 function AppShell() {
-  const { activeTab, currentUser } = useApp();
+  const { activeTab, currentUser, isAuthenticated } = useApp();
   const now = new Date();
   const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+  if (!isAuthenticated) return <AuthScreen />;
 
   const renderScreen = () => {
     switch (activeTab) {
       case 'home': return <HomeScreen />;
+      case 'runnersmap': return <RunnersMapScreen />;
       case 'taskdetail': return <TaskDetailScreen />;
       case 'mytasks': return <MyTasksScreen />;
       case 'notifications': return <NotificationsScreen />;

@@ -3,7 +3,7 @@ import StarRating from '../components/StarRating';
 import './ProfileScreen.css';
 
 export default function ProfileScreen() {
-    const { currentUser, toggleOnline, myTasks } = useApp();
+    const { currentUser, toggleOnline, myTasks, logout } = useApp();
     const completedCount = myTasks.filter(t => t.status === 'completed').length;
 
     return (
@@ -64,6 +64,12 @@ export default function ProfileScreen() {
                         <p className="review-comment">"{r.comment}"</p>
                     </div>
                 ))}
+            </div>
+
+            <div style={{ paddingBottom: '30px' }}>
+                <button className="btn-secondary btn-full" style={{ color: 'var(--danger)', borderColor: 'rgba(255,101,132,0.3)' }} onClick={logout}>
+                    Log Out
+                </button>
             </div>
         </div>
     );

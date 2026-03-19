@@ -37,11 +37,17 @@ export default function HomeScreen() {
                 </div>
             )}
 
-            {!currentUser.isOnline ? (
+            {!currentUser.isOnline && currentUser.role === 'runner' ? (
                 <div className="offline-state">
                     <div className="offline-icon">📴</div>
                     <h3>You're Offline</h3>
                     <p>Go online from your profile to see available deliveries.</p>
+                </div>
+            ) : currentUser.role === 'poster' ? (
+                <div className="empty-state">
+                    <div className="empty-icon">📦</div>
+                    <h3>Welcome, Poster!</h3>
+                    <p>Tap the + button to create a new delivery or check the Runners map.</p>
                 </div>
             ) : isLoading ? (
                 <div className="loading-state">
@@ -63,13 +69,15 @@ export default function HomeScreen() {
             )}
 
             {/* Floating Action Button for Posting New Delivery */}
-            <button
-                className="fab-add-post"
-                onClick={() => setActiveTab('addpost')}
-                title="Post new delivery request"
-            >
-                <span>+</span>
-            </button>
+            {currentUser.role === 'poster' && (
+                <button
+                    className="fab-add-post"
+                    onClick={() => setActiveTab('addpost')}
+                    title="Post new delivery request"
+                >
+                    <span>+</span>
+                </button>
+            )}
 
         </div>
     );
