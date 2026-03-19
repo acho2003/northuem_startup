@@ -41,7 +41,7 @@ export default function TaskDetailScreen() {
 
             <div className="detail-hero" style={{ borderColor: color }}>
                 <h2 className="detail-title">{task.title}</h2>
-                <div className="detail-reward">${task.reward}</div>
+                <div className="detail-reward">BTN {task.reward}</div>
             </div>
 
             <div className="detail-route-card">
@@ -116,7 +116,7 @@ export default function TaskDetailScreen() {
             <div className="detail-actions">
                 {!isAccepted && (
                     <button className="btn-primary btn-full" onClick={handleAccept}>
-                        Accept Delivery — ${task.reward}
+                        Accept Delivery — BTN {task.reward}
                     </button>
                 )}
                 {task.status === 'accepted' && (

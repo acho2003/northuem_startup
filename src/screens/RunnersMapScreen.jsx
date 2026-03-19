@@ -86,7 +86,7 @@ export default function RunnersMapScreen() {
                     <div className="rn-sheet-body">
                         {requestState === 'idle' && (
                             <>
-                                <p className="rn-pricing-text">Estimated Rate: <strong>Nu. 150 - 300</strong></p>
+                                <p className="rn-pricing-text">Estimated Rate: <strong>BTN 150 - 300</strong></p>
                                 <button className="btn-primary btn-full rn-btn" onClick={handleRequest}>
                                     Request {selectedRunner.name.split(' ')[0]}
                                 </button>

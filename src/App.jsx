@@ -8,6 +8,7 @@ import ProfileScreen from './screens/ProfileScreen';
 import LiveTrackingScreen from './screens/LiveTrackingScreen';
 import AddPostScreen from './screens/AddPostScreen';
 import RunnersMapScreen from './screens/RunnersMapScreen';
+import TasksMapScreen from './screens/TasksMapScreen';
 import AuthScreen from './screens/AuthScreen';
 import './index.css';
 
@@ -22,6 +23,7 @@ function AppShell() {
     switch (activeTab) {
       case 'home': return <HomeScreen />;
       case 'runnersmap': return <RunnersMapScreen />;
+      case 'tasksmap': return <TasksMapScreen />;
       case 'taskdetail': return <TaskDetailScreen />;
       case 'mytasks': return <MyTasksScreen />;
       case 'notifications': return <NotificationsScreen />;

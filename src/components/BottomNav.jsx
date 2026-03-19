@@ -3,6 +3,7 @@ import './BottomNav.css';
 
 const tabs = [
     { id: 'home', label: 'Home', icon: '🏠' },
+    { id: 'tasksmap', label: 'Map', icon: '🗺️' },
     { id: 'runnersmap', label: 'Runners', icon: '📍' },
     { id: 'mytasks', label: 'My Tasks', icon: '📋' },
     { id: 'notifications', label: 'Alerts', icon: '🔔' },
@@ -14,6 +15,7 @@ export default function BottomNav() {
 
     const visibleTabs = tabs.filter(t => {
         if (currentUser?.role === 'runner' && t.id === 'runnersmap') return false;
+        if (currentUser?.role === 'poster' && t.id === 'tasksmap') return false;
         if (currentUser?.role === 'poster' && t.id === 'home') return false;
         return true;
     });

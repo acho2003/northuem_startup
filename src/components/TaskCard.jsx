@@ -58,7 +58,7 @@ export default function TaskCard({ task }) {
                     <StarRating rating={task.posterRating} size="sm" />
                 </div>
                 <div className="task-right">
-                    <span className="task-reward">${task.reward}</span>
+                    <span className="task-reward">BTN {task.reward}</span>
                     <button
                         className="btn-accept"
                         onClick={handleAccept}

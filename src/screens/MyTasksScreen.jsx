@@ -48,7 +48,7 @@ export default function MyTasksScreen() {
                             <div className="my-task-meta">
                                 <span className="text-truncate" style={{ maxWidth: 150 }}>📍 {task.pickup}</span>
                                 <span>⏱ {task.estimatedTime}</span>
-                                <span className="reward-tag">Nu. {task.reward}</span>
+                                <span className="reward-tag">BTN {task.reward}</span>
                             </div>
                         </div>
                     );

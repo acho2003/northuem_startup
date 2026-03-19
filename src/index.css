@@ -9,20 +9,20 @@
 }
 
 :root {
-  --bg: #0f1117;
-  --surface: #1a1d27;
-  --surface2: #22263a;
-  --border: #2e3250;
-  --accent: #6c63ff;
-  --accent2: #43d9ad;
-  --text: #e8eaf6;
-  --text-sub: #8b90b8;
-  --danger: #ff6584;
-  --warning: #f7a440;
-  --success: #43d9ad;
+  --bg: #f5f5f7;
+  --surface: #ffffff;
+  --surface2: #f5f5f7;
+  --border: #e5e5ea;
+  --accent: #000000;
+  --accent2: #0b66ff;
+  --text: #1d1d1f;
+  --text-sub: #86868b;
+  --danger: #ff3b30;
+  --warning: #ff9500;
+  --success: #34c759;
   --radius: 16px;
   --radius-sm: 10px;
-  --shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
+  --shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
 }
 
 html,
@@ -30,7 +30,7 @@ body,
 #root {
   height: 100%;
   font-family: 'Inter', sans-serif;
-  background: #060810;
+  background: #e5e5ea;
   color: var(--text);
 }
 
@@ -40,7 +40,7 @@ body,
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background: radial-gradient(ellipse at 20% 0%, #1a0a4a 0%, #060810 60%);
+  background: linear-gradient(135deg, #e1e3ec, #d1d5db);
 }
 
 .mobile-frame {
@@ -48,10 +48,10 @@ body,
   height: 844px;
   background: var(--bg);
   border-radius: 44px;
-  border: 2px solid var(--border);
+  border: 10px solid #000;
   box-shadow:
-    0 0 0 8px #0d0f1a,
-    0 0 60px rgba(108, 99, 255, 0.15),
+    0 0 0 2px #fff inset,
+    0 0 60px rgba(0, 0, 0, 0.15),
     var(--shadow);
   position: relative;
   overflow: hidden;
@@ -67,7 +67,7 @@ body,
   transform: translateX(-50%);
   width: 126px;
   height: 34px;
-  background: #0d0f1a;
+  background: #000;
   border-radius: 0 0 20px 20px;
   z-index: 100;
   display: flex;
@@ -197,7 +197,7 @@ body,
 
 /* Buttons */
 .btn-primary {
-  background: linear-gradient(135deg, var(--accent), #9c8fff);
+  background: var(--accent);
   color: #fff;
   border: none;
   border-radius: 12px;
@@ -211,7 +211,7 @@ body,
 
 .btn-primary:hover {
   transform: translateY(-1px);
-  box-shadow: 0 6px 20px rgba(108, 99, 255, 0.4);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
 }
 
 .btn-primary:active {

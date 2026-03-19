@@ -31,7 +31,6 @@ export const mockRunners = [
         tasksCompleted: 89,
         vehicle: 'Truck / Van 🚚',
         plate: 'BP-2A-1199',
-        phone: '+975 17 99 88 77',
         pos: { top: '20%', left: '70%' },
         status: 'available',
     },
@@ -43,7 +42,6 @@ export const mockRunners = [
         tasksCompleted: 230,
         vehicle: 'Car 🚗',
         plate: 'BP-1A-8812',
-        phone: '+975 17 55 44 33',
         pos: { top: '75%', left: '30%' },
         status: 'busy',
     },
@@ -89,7 +87,7 @@ export const mockTasks = [
         pickup: 'Kinzang Building, Norzin Lam',
         dropoff: 'District Court, Changlam',
         distance: '2.5 km',
-        reward: 150, // Nu.
+        reward: 150, // BTN
         estimatedTime: '15 min',
         posterId: 'u2',
         posterName: 'Dechen Zangmo',
@@ -97,6 +95,7 @@ export const mockTasks = [
         status: 'available',
         category: 'Bike',
         postedAt: '10 min ago',
+        pos: { top: '40%', left: '50%' }, // Added for Maps Screen
     },
     {
         id: 't2',
@@ -106,7 +105,7 @@ export const mockTasks = [
         pickup: 'Furniture Shop, Motithang',
         dropoff: 'Olarongchu, Babesa',
         distance: '6.2 km',
-        reward: 800, // Nu.
+        reward: 800, // BTN
         estimatedTime: '40 min',
         posterId: 'u2',
         posterName: 'Dechen Zangmo',
@@ -114,6 +113,7 @@ export const mockTasks = [
         status: 'available',
         category: 'Truck/Van',
         postedAt: '22 min ago',
+        pos: { top: '25%', left: '35%' },
     },
     {
         id: 't3',
@@ -123,7 +123,7 @@ export const mockTasks = [
         pickup: 'Zombala 2, Hong Kong Market',
         dropoff: 'Tech Park, Babesa',
         distance: '7.0 km',
-        reward: 350, // Nu.
+        reward: 350, // BTN
         estimatedTime: '30 min',
         posterId: 'u2',
         posterName: 'Dechen Zangmo',
@@ -131,6 +131,7 @@ export const mockTasks = [
         status: 'available',
         category: 'Car',
         postedAt: '1 hr ago',
+        pos: { top: '65%', left: '70%' },
     },
 ];
 
@@ -140,7 +141,7 @@ export const mockNotifications = [
     {
         id: 'n1',
         type: 'new_task',
-        message: 'New delivery request nearby: Urgent Legal Documents (Nu. 150)',
+        message: 'New delivery request nearby: Urgent Legal Documents (BTN 150)',
         time: '10 min ago',
         read: false,
     },

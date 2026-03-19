@@ -70,7 +70,7 @@ export default function AddPostScreen() {
 
                 <div className="form-row">
                     <div className="form-group half">
-                        <label>Reward ($)</label>
+                        <label>Reward (BTN)</label>
                         <input type="number" name="reward" required placeholder="0.00" value={formData.reward} onChange={handleChange} />
                     </div>
                     <div className="form-group half">
