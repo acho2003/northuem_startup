@@ -1,0 +1,148 @@
+.add-post-screen {
+    padding: 0 20px 20px;
+}
+
+.add-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 24px;
+    padding-top: 16px;
+}
+
+.back-btn {
+    background: transparent;
+    border: none;
+    color: var(--text-sub);
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    padding: 8px 0;
+}
+
+.back-btn:hover {
+    color: var(--danger);
+}
+
+.add-post-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.form-group label {
+    display: block;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text-sub);
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+input,
+textarea,
+select {
+    width: 100%;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 14px 16px;
+    color: var(--text);
+    font-size: 15px;
+    font-family: inherit;
+    transition: all 0.2s;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.15);
+}
+
+.form-row {
+    display: flex;
+    gap: 16px;
+}
+
+.half {
+    flex: 1;
+}
+
+.form-footer {
+    margin-top: 10px;
+}
+
+.submit-btn {
+    padding: 16px;
+    font-size: 16px;
+}
+
+/* Route input styling */
+.form-route-box {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 16px;
+    position: relative;
+    margin-bottom: 10px;
+}
+
+.route-leg-input {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.input-wrap {
+    flex: 1;
+}
+
+.input-wrap label {
+    font-size: 11px;
+    margin-bottom: 4px;
+}
+
+.input-wrap input {
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid var(--border);
+    border-radius: 0;
+    padding: 8px 0;
+    font-size: 15px;
+}
+
+.input-wrap input:focus {
+    box-shadow: none;
+    border-color: var(--accent);
+}
+
+.route-connector-input {
+    position: absolute;
+    left: 21px;
+    top: 40px;
+    width: 2px;
+    height: 50px;
+    background: var(--border);
+    z-index: 1;
+}
+
+.route-icon {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    position: relative;
+    z-index: 2;
+    flex-shrink: 0;
+}
+
+.route-icon.pickup-icon {
+    background: transparent;
+    border: 3px solid var(--accent);
+}
+
+.route-icon.dropoff-icon {
+    background: var(--success);
+}

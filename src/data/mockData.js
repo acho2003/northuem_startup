@@ -1,0 +1,152 @@
+export const mockRunners = [
+    {
+        id: 'r1',
+        name: 'Tenzin Dorji',
+        avatar: 'TD',
+        rating: 4.9,
+        tasksCompleted: 412,
+        vehicle: 'Car 🚗',
+        plate: 'BP-1A-4421',
+        phone: '+975 17 11 22 33',
+        pos: { top: '35%', left: '40%' },
+        status: 'available',
+    },
+    {
+        id: 'r2',
+        name: 'Karma Wangchuk',
+        avatar: 'KW',
+        rating: 4.7,
+        tasksCompleted: 156,
+        vehicle: 'Bike 🚲',
+        plate: 'N/A',
+        phone: '+975 17 22 33 44',
+        pos: { top: '55%', left: '60%' },
+        status: 'available',
+    },
+    {
+        id: 'r3',
+        name: 'Sonam Pelden',
+        avatar: 'SP',
+        rating: 4.5,
+        tasksCompleted: 89,
+        vehicle: 'Truck / Van 🚚',
+        plate: 'BP-2A-1199',
+        phone: '+975 17 99 88 77',
+        pos: { top: '20%', left: '70%' },
+        status: 'available',
+    },
+    {
+        id: 'r4',
+        name: 'Pema Lhamo',
+        avatar: 'PL',
+        rating: 4.8,
+        tasksCompleted: 230,
+        vehicle: 'Car 🚗',
+        plate: 'BP-1A-8812',
+        phone: '+975 17 55 44 33',
+        pos: { top: '75%', left: '30%' },
+        status: 'busy',
+    },
+];
+
+export const mockUsers = [
+    {
+        id: 'u1',
+        name: 'Tshering Tobgay',
+        avatar: 'TT',
+        rating: 4.7,
+        tasksCompleted: 38,
+        isOnline: true,
+        vehicle: 'Car 🚗',
+        reviews: [
+            { from: 'Jigme', rating: 5, comment: 'Very reliable and careful with packages!' },
+            { from: 'Ugyen', rating: 4, comment: 'Good communication.' },
+        ],
+    },
+    {
+        id: 'u2',
+        name: 'Dechen Zangmo',
+        avatar: 'DZ',
+        rating: 4.2,
+        tasksCompleted: 15,
+        isOnline: false,
+        vehicle: 'Bike 🚲',
+        reviews: [
+            { from: 'Tshering', rating: 4, comment: 'Fast and friendly delivery.' },
+            { from: 'Kinley', rating: 5, comment: 'Would hire again.' },
+        ],
+    },
+];
+
+export const mockTasks = [
+    {
+        id: 't1',
+        title: 'Urgent Legal Documents',
+        shortDesc: 'Deliver sealed legal docs to Thimphu District Court.',
+        fullDesc: 'I need a trusted courier to pick up signed contract papers from my office and deliver them directly to the courthouse clerk. Needs to be done ASAP before they close at 5 PM.',
+        pickup: 'Kinzang Building, Norzin Lam',
+        dropoff: 'District Court, Changlam',
+        distance: '2.5 km',
+        reward: 150, // Nu.
+        estimatedTime: '15 min',
+        posterId: 'u2',
+        posterName: 'Dechen Zangmo',
+        posterRating: 4.2,
+        status: 'available',
+        category: 'Bike',
+        postedAt: '10 min ago',
+    },
+    {
+        id: 't2',
+        title: 'Large Sofa Transport',
+        shortDesc: 'Help transport a 3-seater sofa.',
+        fullDesc: 'Just bought a sofa on Facebook Marketplace. I need someone with a large truck or van to pick it up and deliver it to my apartment in Babesa. I will help load and unload.',
+        pickup: 'Furniture Shop, Motithang',
+        dropoff: 'Olarongchu, Babesa',
+        distance: '6.2 km',
+        reward: 800, // Nu.
+        estimatedTime: '40 min',
+        posterId: 'u2',
+        posterName: 'Dechen Zangmo',
+        posterRating: 4.2,
+        status: 'available',
+        category: 'Truck/Van',
+        postedAt: '22 min ago',
+    },
+    {
+        id: 't3',
+        title: 'Momo Catering Order',
+        shortDesc: 'Deliver 50 plates of Momos for an event.',
+        fullDesc: 'Looking for a car driver to carefully transport a large catering order from Zombala Restaurant to a corporate office event. Please ensure your car has enough trunk space and drive carefully!',
+        pickup: 'Zombala 2, Hong Kong Market',
+        dropoff: 'Tech Park, Babesa',
+        distance: '7.0 km',
+        reward: 350, // Nu.
+        estimatedTime: '30 min',
+        posterId: 'u2',
+        posterName: 'Dechen Zangmo',
+        posterRating: 4.2,
+        status: 'available',
+        category: 'Car',
+        postedAt: '1 hr ago',
+    },
+];
+
+export const locations = ['All', 'Norzin Lam', 'Motithang', 'Babesa', 'Changlam', 'Taba'];
+
+export const mockNotifications = [
+    {
+        id: 'n1',
+        type: 'new_task',
+        message: 'New delivery request nearby: Urgent Legal Documents (Nu. 150)',
+        time: '10 min ago',
+        read: false,
+    },
+    {
+        id: 'n2',
+        type: 'accepted',
+        message: 'Tenzin accepted your delivery "Catering Order".',
+        time: '3 hr ago',
+        read: true,
+    },
+];
