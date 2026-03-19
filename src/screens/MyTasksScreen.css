@@ -1,3 +1,46 @@
+.my-tasks-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 8px;
+    margin-bottom: 4px;
+}
+
+.role-badge-sm {
+    font-size: 11px;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 20px;
+}
+
+.role-badge-sm.poster {
+    background: rgba(67, 217, 173, 0.12);
+    color: var(--success);
+}
+
+.role-badge-sm.runner {
+    background: rgba(108, 99, 255, 0.12);
+    color: var(--accent);
+}
+
+.cancel-task-btn {
+    margin-top: 12px;
+    background: transparent;
+    border: 1px solid rgba(255, 101, 132, 0.4);
+    color: var(--danger);
+    border-radius: 8px;
+    padding: 7px 14px;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.2s;
+}
+
+.cancel-task-btn:hover {
+    background: rgba(255, 101, 132, 0.1);
+}
+
 .my-task-card {
     background: var(--surface);
     border: 1px solid var(--border);

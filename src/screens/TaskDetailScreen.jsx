@@ -4,13 +4,22 @@ import StarRating from '../components/StarRating';
 import './TaskDetailScreen.css';
 
 export default function TaskDetailScreen() {
-    const { tasks, selectedTaskId, acceptTask, setActiveTab, updateTaskStatus, ratingTarget, submitRating } = useApp();
+    const {
+        tasks, selectedTaskId, acceptTask, setActiveTab,
+        updateTaskStatus, ratingTarget, submitRating, activeRole, currentUser
+    } = useApp();
     const task = tasks.find(t => t.id === selectedTaskId);
     const [hoverRating, setHoverRating] = useState(0);
     const [chosenRating, setChosenRating] = useState(0);
     const [ratingSubmitted, setRatingSubmitted] = useState(false);
 
     if (!task) return null;
+
+    const isPoster = activeRole === 'poster';
+    const isRunner = activeRole === 'runner';
+
+    const isMyPost = task.posterId === currentUser?.id;
+    const isMyAcceptedTask = task.runnerId === currentUser?.id;
 
     const isAccepted = ['accepted', 'inProgress', 'completed'].includes(task.status);
     const isCompleted = task.status === 'completed';
@@ -33,7 +42,7 @@ export default function TaskDetailScreen() {
     return (
         <div className="screen task-detail-screen">
             <div className="detail-header">
-                <button className="back-btn" onClick={() => setActiveTab('home')}>← Back</button>
+                <button className="back-btn" onClick={() => setActiveTab(isPoster ? 'mytasks' : 'home')}>← Back</button>
                 <span className="detail-category-badge" style={{ background: color + '22', color }}>
                     🚚 {task.category}
                 </span>
@@ -73,18 +82,34 @@ export default function TaskDetailScreen() {
                 <p className="detail-desc">{task.fullDesc}</p>
             </div>
 
-            <div className="detail-section poster-section">
-                <h4>Customer</h4>
-                <div className="poster-row">
-                    <div className="avatar-md" style={{ background: color }}>{task.posterName.split(' ').map(n => n[0]).join('')}</div>
-                    <div>
-                        <p className="poster-name">{task.posterName}</p>
-                        <StarRating rating={task.userRating ?? task.posterRating} size="sm" />
+            {/* If runner, show poster info. If poster, show runner info (if accepted) */}
+            {isRunner && (
+                <div className="detail-section poster-section">
+                    <h4>Customer (Poster)</h4>
+                    <div className="poster-row">
+                        <div className="avatar-md" style={{ background: color }}>{task.posterName.split(' ').map(n => n[0]).join('')}</div>
+                        <div>
+                            <p className="poster-name">{task.posterName}</p>
+                            <StarRating rating={task.userRating ?? task.posterRating} size="sm" />
+                        </div>
                     </div>
                 </div>
-            </div>
+            )}
 
-            {needsRating && (
+            {isPoster && isAccepted && task.runnerId && (
+                <div className="detail-section poster-section">
+                    <h4>Runner</h4>
+                    <div className="poster-row">
+                        <div className="avatar-md" style={{ background: 'var(--accent)' }}>🏃</div>
+                        <div>
+                            <p className="poster-name">Assigned Runner</p>
+                            <p style={{ fontSize: 13, color: 'var(--text-sub)' }}>On their way</p>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {needsRating && isRunner && (
                 <div className="rating-modal-inline">
                     <h4>Rate the Customer</h4>
                     <p>How was your experience delivering for {task.posterName}?</p>
@@ -114,28 +139,40 @@ export default function TaskDetailScreen() {
             )}
 
             <div className="detail-actions">
-                {!isAccepted && (
+                {/* ── Runner Actions ── */}
+                {isRunner && !isAccepted && (
                     <button className="btn-primary btn-full" onClick={handleAccept}>
                         Accept Delivery — BTN {task.reward}
                     </button>
                 )}
-                {task.status === 'accepted' && (
+                {isRunner && isMyAcceptedTask && task.status === 'accepted' && (
                     <button className="btn-secondary btn-full" onClick={() => handleStatusChange('inProgress')}>
                         I've Picked It Up (In Progress)
                     </button>
                 )}
-                {task.status === 'inProgress' && (
+                {isRunner && isMyAcceptedTask && task.status === 'inProgress' && (
                     <button className="btn-success btn-full" onClick={() => handleStatusChange('completed')}>
                         Mark Delivered ✓
                     </button>
                 )}
-                {isCompleted && (
-                    <div className="completed-badge">✅ Delivery Completed</div>
-                )}
-                {isAccepted && !isCompleted && (
+                {isRunner && isMyAcceptedTask && !isCompleted && (
                     <button className="btn-secondary btn-full" style={{ marginTop: '10px', background: 'var(--surface2)', borderColor: 'var(--accent)', color: 'var(--text)' }} onClick={() => setActiveTab('livetrack')}>
                         📍 View Live GPS Map
                     </button>
+                )}
+
+                {/* ── Poster Actions ── */}
+                {isPoster && isMyPost && task.status === 'available' && (
+                    <div className="waiting-badge">⏳ Waiting for a runner to accept...</div>
+                )}
+                {isPoster && isMyPost && (task.status === 'accepted' || task.status === 'inProgress') && (
+                    <button className="btn-secondary btn-full" style={{ background: 'var(--surface2)', borderColor: 'var(--accent)', color: 'var(--text)' }} onClick={() => setActiveTab('livetrack')}>
+                        📍 Track Runner Live
+                    </button>
+                )}
+
+                {isCompleted && (
+                    <div className="completed-badge">✅ Delivery Completed</div>
                 )}
             </div>
         </div>

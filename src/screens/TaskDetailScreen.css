@@ -229,6 +229,17 @@
     font-size: 15px;
 }
 
+.waiting-badge {
+    text-align: center;
+    padding: 16px;
+    background: rgba(247, 164, 64, 0.1);
+    border: 1px solid rgba(247, 164, 64, 0.3);
+    border-radius: 12px;
+    color: #f7a440;
+    font-weight: 800;
+    font-size: 15px;
+}
+
 /* Inline rating */
 .rating-modal-inline {
     background: var(--surface);

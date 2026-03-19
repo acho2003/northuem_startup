@@ -69,6 +69,89 @@
     background: var(--danger);
 }
 
+/* ── Role Switch Card ───────────────────────────────── */
+.role-switch-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 18px 16px 14px;
+    margin-bottom: 20px;
+}
+
+.role-switch-label {
+    font-size: 11px;
+    font-weight: 800;
+    color: var(--text-sub);
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin-bottom: 12px;
+}
+
+.role-switch-toggle {
+    display: flex;
+    gap: 0;
+    background: var(--bg);
+    border-radius: 14px;
+    padding: 4px;
+    margin-bottom: 10px;
+}
+
+.role-switch-divider {
+    width: 1px;
+    background: var(--border);
+    margin: 4px 0;
+    flex-shrink: 0;
+}
+
+.role-switch-btn {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    padding: 12px 8px;
+    border-radius: 10px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    transition: all 0.25s;
+}
+
+.role-switch-icon { font-size: 22px; }
+
+.role-switch-name {
+    font-size: 13px;
+    font-weight: 800;
+    color: var(--text-sub);
+    transition: color 0.25s;
+}
+
+.role-switch-sub {
+    font-size: 10px;
+    color: var(--text-sub);
+    opacity: 0.7;
+}
+
+.role-switch-btn.active .role-switch-name {
+    color: var(--text);
+}
+
+.role-switch-btn.poster-active {
+    background: rgba(67, 217, 173, 0.15);
+    box-shadow: 0 2px 12px rgba(67, 217, 173, 0.15);
+}
+
+.role-switch-btn.runner-active {
+    background: rgba(108, 99, 255, 0.15);
+    box-shadow: 0 2px 12px rgba(108, 99, 255, 0.2);
+}
+
+.role-switch-hint {
+    font-size: 12px;
+    color: var(--text-sub);
+    line-height: 1.4;
+}
+
 /* Stats */
 .profile-stats {
     display: flex;

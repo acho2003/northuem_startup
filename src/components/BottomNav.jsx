@@ -1,24 +1,19 @@
 import { useApp } from '../context/AppContext';
 import './BottomNav.css';
 
-const tabs = [
-    { id: 'home', label: 'Home', icon: '🏠' },
-    { id: 'tasksmap', label: 'Map', icon: '🗺️' },
-    { id: 'runnersmap', label: 'Runners', icon: '📍' },
-    { id: 'mytasks', label: 'My Tasks', icon: '📋' },
-    { id: 'notifications', label: 'Alerts', icon: '🔔' },
-    { id: 'profile', label: 'Profile', icon: '👤' },
+const ALL_TABS = [
+    { id: 'home',          label: 'Home',     icon: '🏠', roles: ['runner'] },
+    { id: 'tasksmap',      label: 'Map',      icon: '🗺️', roles: ['runner'] },
+    { id: 'runnersmap',    label: 'Runners',  icon: '📍', roles: ['poster'] },
+    { id: 'mytasks',       label: 'My Tasks', icon: '📋', roles: ['poster', 'runner'] },
+    { id: 'notifications', label: 'Alerts',   icon: '🔔', roles: ['poster', 'runner'] },
+    { id: 'profile',       label: 'Profile',  icon: '👤', roles: ['poster', 'runner'] },
 ];
 
 export default function BottomNav() {
-    const { activeTab, setActiveTab, unreadCount, currentUser } = useApp();
+    const { activeTab, setActiveTab, unreadCount, activeRole } = useApp();
 
-    const visibleTabs = tabs.filter(t => {
-        if (currentUser?.role === 'runner' && t.id === 'runnersmap') return false;
-        if (currentUser?.role === 'poster' && t.id === 'tasksmap') return false;
-        if (currentUser?.role === 'poster' && t.id === 'home') return false;
-        return true;
-    });
+    const visibleTabs = ALL_TABS.filter(t => t.roles.includes(activeRole));
 
     return (
         <nav className="bottom-nav">

@@ -2,8 +2,15 @@ import { useApp } from '../context/AppContext';
 import StarRating from './StarRating';
 import './TaskCard.css';
 
-export default function TaskCard({ task }) {
-    const { setSelectedTaskId, setActiveTab, acceptTask } = useApp();
+const STATUS_CONFIG = {
+    available:  { label: 'Open',         color: '#43d9ad' },
+    accepted:   { label: 'Runner Found', color: '#f7a440' },
+    inProgress: { label: 'In Transit',   color: '#3b9eff' },
+    completed:  { label: 'Delivered',    color: '#a78bfa' },
+};
+
+export default function TaskCard({ task, showStatus = false }) {
+    const { setSelectedTaskId, setActiveTab, acceptTask, activeRole } = useApp();
 
     const handleView = () => {
         setSelectedTaskId(task.id);
@@ -20,8 +27,8 @@ export default function TaskCard({ task }) {
         Bike: '#43d9ad',
         'Truck/Van': '#f7a440',
     };
-
     const color = categoryColors[task.category] || '#3b9eff';
+    const statusInfo = STATUS_CONFIG[task.status] || { label: task.status, color: '#888' };
 
     return (
         <div className="task-card" onClick={handleView}>
@@ -29,7 +36,13 @@ export default function TaskCard({ task }) {
                 <div className="task-category-badge" style={{ background: color + '22', color }}>
                     {task.category}
                 </div>
-                <span className="task-posted">{task.postedAt}</span>
+                {showStatus ? (
+                    <span className="task-status-pill" style={{ color: statusInfo.color, background: statusInfo.color + '22' }}>
+                        {statusInfo.label}
+                    </span>
+                ) : (
+                    <span className="task-posted">{task.postedAt}</span>
+                )}
             </div>
 
             <h3 className="task-title">{task.title}</h3>
@@ -59,12 +72,12 @@ export default function TaskCard({ task }) {
                 </div>
                 <div className="task-right">
                     <span className="task-reward">BTN {task.reward}</span>
-                    <button
-                        className="btn-accept"
-                        onClick={handleAccept}
-                    >
-                        Accept
-                    </button>
+                    {/* Show Accept only for runners viewing available tasks */}
+                    {activeRole === 'runner' && task.status === 'available' && (
+                        <button className="btn-accept" onClick={handleAccept}>
+                            Accept
+                        </button>
+                    )}
                 </div>
             </div>
         </div>

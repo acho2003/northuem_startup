@@ -1,134 +1,217 @@
-import { createContext, useContext, useState, useEffect } from 'react';
-import { mockUsers, mockTasks, mockNotifications, mockRunners } from '../data/mockData';
+import { createContext, useContext, useState, useEffect, useCallback } from 'react';
+import { apiDemoLogin, apiLogin, apiSignUp, apiUpdateUser } from '../api/auth';
+import {
+  apiGetTasks, apiAddTask, apiAcceptTask,
+  apiUpdateTaskStatus, apiSubmitRating, apiCancelTask, seedTasks,
+} from '../api/tasks';
+import {
+  apiGetNotifications, apiAddNotification,
+  apiMarkAllRead, seedNotifications,
+} from '../api/notifications';
+import { mockRunners } from '../data/mockData';
 
 const AppContext = createContext(null);
 
 export function AppProvider({ children }) {
-    const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [currentUser, setCurrentUser] = useState(null);
+  const [tasks, setTasks] = useState([]);
+  const [notifications, setNotifications] = useState([]);
+  const [runners] = useState([...mockRunners]);
+  const [activeTab, setActiveTab] = useState('home');
+  const [selectedTaskId, setSelectedTaskId] = useState(null);
+  const [locationFilter, setLocationFilter] = useState('All');
+  const [isLoading, setIsLoading] = useState(false);
+  const [ratingTarget, setRatingTarget] = useState(null);
+  const [authError, setAuthError] = useState('');
 
-    // We initialize to a fast default, but on fast-login we swap these
-    const [currentUser, setCurrentUser] = useState({ ...mockUsers[0] });
+  // ── Bootstrap from backend ─────────────────────────────────────────────────
+  const loadData = useCallback(() => {
+    seedTasks();
+    seedNotifications();
+    setTasks(apiGetTasks());
+    setNotifications(apiGetNotifications());
+  }, []);
 
-    const [tasks, setTasks] = useState(mockTasks.map(t => ({ ...t })));
-    const [notifications, setNotifications] = useState([...mockNotifications]);
-    const [runners, setRunners] = useState([...mockRunners]);
-    const [activeTab, setActiveTab] = useState('home');
-    const [selectedTaskId, setSelectedTaskId] = useState(null);
-    const [locationFilter, setLocationFilter] = useState('All');
-    const [isLoading, setIsLoading] = useState(false);
-    const [ratingTarget, setRatingTarget] = useState(null);
+  // ── Auth ───────────────────────────────────────────────────────────────────
+  const login = useCallback(async (email, password) => {
+    setAuthError('');
+    try {
+      const user = apiLogin({ email, password });
+      setCurrentUser(user);
+      setIsAuthenticated(true);
+      loadData();
+      setActiveTab('home');
+    } catch (e) {
+      setAuthError(e.message);
+    }
+  }, [loadData]);
 
-    const login = (role) => {
-        // Select the demo user based on role
-        const mockUser = role === 'runner'
-            ? mockUsers.find(u => u.role === 'runner')
-            : mockUsers.find(u => u.role === 'poster');
+  const signUp = useCallback(async ({ name, email, password, vehicle }) => {
+    setAuthError('');
+    try {
+      const user = apiSignUp({ name, email, password, vehicle });
+      setCurrentUser(user);
+      setIsAuthenticated(true);
+      loadData();
+      setActiveTab('home');
+    } catch (e) {
+      setAuthError(e.message);
+    }
+  }, [loadData]);
 
-        // In case no mock user matched, default to the first
-        setCurrentUser(mockUser ? { ...mockUser } : { ...mockUsers[0] });
-        setIsAuthenticated(true);
-        setActiveTab('home');
-    };
+  const demoLogin = useCallback(() => {
+    setAuthError('');
+    const user = apiDemoLogin();
+    setCurrentUser(user);
+    setIsAuthenticated(true);
+    loadData();
+    setActiveTab('home');
+  }, [loadData]);
 
-    const logout = () => {
-        setIsAuthenticated(false);
-    };
+  const logout = useCallback(() => {
+    setIsAuthenticated(false);
+    setCurrentUser(null);
+    setTasks([]);
+    setNotifications([]);
+    setActiveTab('home');
+    setAuthError('');
+  }, []);
 
-    const toggleOnline = () => {
-        if (!currentUser.isOnline) {
-            setIsLoading(true);
-            setTimeout(() => setIsLoading(false), 1500);
-        }
-        setCurrentUser(u => ({ ...u, isOnline: !u.isOnline }));
-    };
+  // ── Role switching (the core new feature) ──────────────────────────────────
+  const switchRole = useCallback((role) => {
+    const updated = apiUpdateUser({ activeRole: role });
+    setCurrentUser(updated);
+    setActiveTab('home');
+  }, []);
 
-    const addPost = (postData) => {
-        const newTask = {
-            ...postData,
-            id: 't_' + Date.now(),
-            posterId: currentUser.id,
-            posterName: currentUser.name,
-            posterRating: currentUser.rating,
-            status: 'available',
-            postedAt: 'Just now',
-        };
-        setTasks(prev => [newTask, ...prev]);
-        setActiveTab('home');
-        setNotifications(prev => [
-            { id: 'n_' + Date.now(), type: 'new_task', message: `You successfully posted: ${newTask.title}`, time: 'Just now', read: false },
-            ...prev
-        ]);
-    };
+  // ── User toggles ──────────────────────────────────────────────────────────
+  const toggleOnline = useCallback(() => {
+    if (!currentUser.isOnline) {
+      setIsLoading(true);
+      setTimeout(() => setIsLoading(false), 1500);
+    }
+    const updated = apiUpdateUser({ isOnline: !currentUser.isOnline });
+    setCurrentUser(updated);
+  }, [currentUser]);
 
-    const acceptTask = (taskId) => {
-        setTasks(prev =>
-            prev.map(t => t.id === taskId ? { ...t, status: 'accepted', runnerId: currentUser.id } : t)
-        );
-        setActiveTab('mytasks');
-        setNotifications(prev => [
-            { id: 'n_' + Date.now(), type: 'accepted', message: `You accepted a delivery! It's now in your task list.`, time: 'Just now', read: false },
-            ...prev,
-        ]);
-    };
-
-    const updateTaskStatus = (taskId, status) => {
-        setTasks(prev =>
-            prev.map(t => t.id === taskId ? { ...t, status } : t)
-        );
-        if (status === 'completed') {
-            setRatingTarget({ taskId });
-            setNotifications(prev => [
-                { id: 'n_' + Date.now(), type: 'completed', message: `Delivery marked as Completed. Please rate the customer.`, time: 'Just now', read: false },
-                ...prev,
-            ]);
-            setCurrentUser(u => ({ ...u, tasksCompleted: u.tasksCompleted + 1 }));
-        }
-    };
-
-    const submitRating = (taskId, rating) => {
-        setTasks(prev => prev.map(t => t.id === taskId ? { ...t, userRating: rating } : t));
-        setRatingTarget(null);
-    };
-
-    const markAllNotificationsRead = () => {
-        setNotifications(prev => prev.map(n => ({ ...n, read: true })));
-    };
-
-    const unreadCount = notifications.filter(n => !n.read).length;
-
-    const availableTasks = tasks.filter(t => {
-        if (!currentUser.isOnline && currentUser.role === 'runner') return false;
-        if (t.status !== 'available') return false;
-        if (locationFilter !== 'All' && !t.pickup.includes(locationFilter) && !t.dropoff.includes(locationFilter)) return false;
-        return true;
+  // ── Task actions ──────────────────────────────────────────────────────────
+  const addPost = useCallback((postData) => {
+    const newTask = apiAddTask({
+      ...postData,
+      posterId: currentUser.id,
+      posterName: currentUser.name,
+      posterRating: currentUser.rating,
     });
-
-    // Posters see tasks they'posted'. Runners see 'accepted' tasks.
-    const myTasks = tasks.filter(t => {
-        if (currentUser.role === 'poster') {
-            return t.posterId === currentUser.id;
-        } else {
-            return ['accepted', 'inProgress', 'completed'].includes(t.status) && t.runnerId === currentUser.id;
-        }
+    setTasks(apiGetTasks());
+    setActiveTab('home');
+    const notes = apiAddNotification({
+      type: 'new_task',
+      message: `You posted: ${newTask.title}`,
     });
+    setNotifications(notes);
+  }, [currentUser]);
 
+  const acceptTask = useCallback((taskId) => {
+    apiAcceptTask(taskId, currentUser.id);
+    setTasks(apiGetTasks());
+    // Switch to runner view after accepting
+    setActiveTab('mytasks');
+    const notes = apiAddNotification({
+      type: 'accepted',
+      message: `You accepted a delivery! Check My Tasks.`,
+    });
+    setNotifications(notes);
+  }, [currentUser]);
+
+  const updateTaskStatus = useCallback((taskId, status) => {
+    apiUpdateTaskStatus(taskId, status);
+    setTasks(apiGetTasks());
+    if (status === 'completed') {
+      setRatingTarget({ taskId });
+      const notes = apiAddNotification({
+        type: 'completed',
+        message: `Delivery completed! Please rate the customer.`,
+      });
+      setNotifications(notes);
+      const updated = apiUpdateUser({ tasksCompleted: (currentUser.tasksCompleted || 0) + 1 });
+      setCurrentUser(updated);
+    }
+  }, [currentUser]);
+
+  const submitRating = useCallback((taskId, rating) => {
+    apiSubmitRating(taskId, rating);
+    setTasks(apiGetTasks());
+    setRatingTarget(null);
+  }, []);
+
+  const cancelTask = useCallback((taskId) => {
+    apiCancelTask(taskId);
+    setTasks(apiGetTasks());
+    const notes = apiAddNotification({
+      type: 'cancelled',
+      message: `Your task was cancelled.`,
+    });
+    setNotifications(notes);
+  }, []);
+
+  // ── Notifications ──────────────────────────────────────────────────────────
+  const markAllNotificationsRead = useCallback(() => {
+    const notes = apiMarkAllRead();
+    setNotifications(notes);
+  }, []);
+
+  const unreadCount = notifications.filter((n) => !n.read).length;
+
+  // ── Derived data ───────────────────────────────────────────────────────────
+  const activeRole = currentUser?.activeRole ?? 'poster';
+
+  const availableTasks = tasks.filter((t) => {
+    if (activeRole === 'runner' && !currentUser?.isOnline) return false;
+    if (t.status !== 'available') return false;
+    if (
+      locationFilter !== 'All' &&
+      !t.pickup.includes(locationFilter) &&
+      !t.dropoff.includes(locationFilter)
+    ) return false;
+    return true;
+  });
+
+  // Poster → tasks the user posted. Runner → tasks the user accepted.
+  const myTasks = tasks.filter((t) => {
+    if (activeRole === 'poster') return t.posterId === currentUser?.id;
     return (
-        <AppContext.Provider value={{
-            isAuthenticated, login, logout,
-            currentUser, toggleOnline,
-            tasks, availableTasks, myTasks,
-            notifications, unreadCount, markAllNotificationsRead, setNotifications,
-            runners,
-            activeTab, setActiveTab,
-            selectedTaskId, setSelectedTaskId,
-            locationFilter, setLocationFilter,
-            isLoading,
-            acceptTask, updateTaskStatus, addPost,
-            ratingTarget, setRatingTarget, submitRating,
-        }}>
-            {children}
-        </AppContext.Provider>
+      ['accepted', 'inProgress', 'completed'].includes(t.status) &&
+      t.runnerId === currentUser?.id
     );
+  });
+
+  return (
+    <AppContext.Provider
+      value={{
+        // auth
+        isAuthenticated, login, signUp, demoLogin, logout, authError, setAuthError,
+        // user
+        currentUser, toggleOnline, activeRole, switchRole,
+        // tasks
+        tasks, availableTasks, myTasks,
+        addPost, acceptTask, updateTaskStatus, submitRating, cancelTask,
+        // notifications
+        notifications, unreadCount, markAllNotificationsRead,
+        // runners (map)
+        runners,
+        // navigation
+        activeTab, setActiveTab,
+        selectedTaskId, setSelectedTaskId,
+        locationFilter, setLocationFilter,
+        // ui misc
+        isLoading,
+        ratingTarget, setRatingTarget,
+      }}
+    >
+      {children}
+    </AppContext.Provider>
+  );
 }
 
 export const useApp = () => useContext(AppContext);

@@ -21,6 +21,28 @@
     background-clip: text;
 }
 
+/* Mode pill */
+.mode-pill {
+    font-size: 12px;
+    font-weight: 600;
+    border-radius: 20px;
+    padding: 6px 14px;
+    margin-bottom: 14px;
+    display: inline-block;
+}
+
+.runner-pill {
+    background: rgba(108, 99, 255, 0.12);
+    color: var(--accent);
+    border: 1px solid rgba(108, 99, 255, 0.25);
+}
+
+.poster-pill {
+    background: rgba(67, 217, 173, 0.12);
+    color: var(--success);
+    border: 1px solid rgba(67, 217, 173, 0.25);
+}
+
 .filter-btn {
     background: var(--surface2);
     border: 1px solid var(--border);
