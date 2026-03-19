@@ -60,9 +60,9 @@ export function AppProvider({ children }) {
     }
   }, [loadData]);
 
-  const demoLogin = useCallback(() => {
+  const demoLogin = useCallback((userId) => {
     setAuthError('');
-    const user = apiDemoLogin();
+    const user = apiDemoLogin(userId);
     setCurrentUser(user);
     setIsAuthenticated(true);
     loadData();

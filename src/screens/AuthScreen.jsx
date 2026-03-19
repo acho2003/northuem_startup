@@ -99,9 +99,12 @@ export default function AuthScreen() {
                         <div className="auth-divider"><span>or</span></div>
 
                         <div className="auth-demo-box">
-                            <p className="demo-label">⚡ Quick Demo Access</p>
-                            <button className="auth-btn-demo" onClick={demoLogin}>
-                                Continue as <strong>Demo User</strong>
+                            <p className="demo-label">⚡ Direct Access</p>
+                            <button className="auth-btn-demo" onClick={() => demoLogin('u_pema')}>
+                                Log in as <strong>Pema L. (Customer)</strong>
+                            </button>
+                            <button className="auth-btn-demo" onClick={() => demoLogin('u_tenzin')}>
+                                Log in as <strong>Tenzin D. (Runner)</strong>
                             </button>
                         </div>
                     </>
